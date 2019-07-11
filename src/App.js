@@ -1,24 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ChipInput from 'material-ui-chip-input';
 
 function App() {
+  const [values, setValues] = useState([]);
+  const onAdd = chip => setValues([...values, chip]);
+  const onDelete = (chip, index) =>
+    setValues(values.filter((val, i) => index !== i));
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ChipInput value={values} onAdd={onAdd} onDelete={onDelete} />
     </div>
   );
 }
