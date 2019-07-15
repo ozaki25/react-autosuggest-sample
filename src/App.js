@@ -105,6 +105,7 @@ const renderInputComponent = ({
     inputRef={ref}
     fullWidth
     clearInputValueOnChange
+    placeholder="中田, 中島, 中村"
   />
 );
 
