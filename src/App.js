@@ -127,7 +127,7 @@ function App({ classes }) {
   };
 
   const onSuggestionsFetchRequested = ({ value }) => {
-    setChips(getSuggestions({ value, selected: inputValue }));
+    setChips(getSuggestions({ value, selected: selectedChips }));
   };
 
   const onSuggestionsClearRequested = () => {
