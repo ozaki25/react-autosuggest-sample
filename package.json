@@ -15,7 +15,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "PUBLIC_URL=/react-autosuggest-sample/ yarn build && cd build && git init && git add -A && git commit -m 'deploy app' && git push -f git@github.com:ozaki25/react-autosuggest-sample.git master:gh-pages"
   },
   "eslintConfig": {
     "extends": "react-app"
