@@ -1,9 +1,36 @@
 import React, { useState } from 'react';
 import { MenuItem, Paper } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import Autosuggest from 'react-autosuggest';
 import ChipInput from 'material-ui-chip-input';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
+
+const styles = theme => ({
+  container: {
+    flexGrow: 1,
+    position: 'relative',
+  },
+  suggestionsContainerOpen: {
+    position: 'absolute',
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit * 3,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+  },
+  suggestion: {
+    display: 'block',
+  },
+  suggestionsList: {
+    margin: 0,
+    padding: 0,
+    listStyleType: 'none',
+  },
+  textField: {
+    width: '100%',
+  },
+});
 
 const suggestions = ['中田', '中島', '中村'];
 
@@ -81,7 +108,7 @@ const renderInputComponent = ({
   />
 );
 
-function App() {
+function App({ classes }) {
   const [inputValue, setInputValue] = useState('');
   const [chips, setChips] = useState([]);
   const [selectedChips, setSelectedChips] = useState([]);
@@ -113,6 +140,12 @@ function App() {
 
   return (
     <Autosuggest
+      theme={{
+        container: classes.container,
+        suggestionsContainerOpen: classes.suggestionsContainerOpen,
+        suggestionsList: classes.suggestionsList,
+        suggestion: classes.suggestion,
+      }}
       suggestions={chips}
       onSuggestionsFetchRequested={onSuggestionsFetchRequested}
       onSuggestionsClearRequested={onSuggestionsClearRequested}
@@ -127,9 +160,10 @@ function App() {
         onAdd,
         onDelete,
         onChange,
+        classes,
       }}
     />
   );
 }
 
-export default App;
+export default withStyles(styles)(App);
