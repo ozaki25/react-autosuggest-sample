@@ -5,7 +5,7 @@ import ChipInput from 'material-ui-chip-input';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 
-const suggestions = ['西川', '大田', '近藤', '中田'];
+const suggestions = ['中田', '中島', '中村'];
 
 const getSuggestionValue = suggestion => suggestion;
 
@@ -16,6 +16,7 @@ const getSuggestions = ({ value, selected }) => {
   return inputLength === 0
     ? []
     : suggestions.filter(suggestion => {
+        console.log(suggestion);
         const keep =
           count < 5 &&
           !selected.includes(suggestion) &&
@@ -81,39 +82,51 @@ const renderInputComponent = ({
 );
 
 function App() {
-  const [val, setVal] = useState('');
-  const [values, setValues] = useState([]);
-  const onAdd = chip => setValues([...values, chip]);
-  const onDelete = (chip, index) =>
-    setValues(values.filter((val, i) => index !== i));
+  const [inputValue, setInputValue] = useState('');
+  const [chips, setChips] = useState([]);
+  const [selectedChips, setSelectedChips] = useState([]);
 
-  const handleSuggestionsFetchRequested = ({ value }) => {
-    setValues(getSuggestions({ value, selected: val }));
+  const onAdd = chip => {
+    setSelectedChips([...selectedChips, chip]);
   };
 
-  const handleSuggestionsClearRequested = () => setValues([]);
+  const onDelete = (chip, index) => {
+    setSelectedChips(selectedChips.filter((val, i) => index !== i));
+  };
 
-  const handletextFieldInputChange = (e, { newValue }) => setVal(newValue);
+  const onChange = (e, { newValue }) => {
+    setInputValue(newValue);
+  };
+
+  const onSuggestionsFetchRequested = ({ value }) => {
+    setChips(getSuggestions({ value, selected: inputValue }));
+  };
+
+  const onSuggestionsClearRequested = () => {
+    setChips([]);
+  };
+
+  const onSuggestionSelected = (e, { suggestionValue }) => {
+    e.preventDefault();
+    onAdd(suggestionValue);
+  };
 
   return (
     <Autosuggest
-      renderInputComponent={renderInputComponent}
-      suggestions={values}
-      onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
-      onSuggestionsClearRequested={handleSuggestionsClearRequested}
-      renderSuggestionsContainer={renderSuggestionsContainer}
-      getSuggestionValue={getSuggestionValue}
+      suggestions={chips}
+      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+      onSuggestionsClearRequested={onSuggestionsClearRequested}
+      onSuggestionSelected={onSuggestionSelected}
       renderSuggestion={renderSuggestion}
-      onSuggestionSelected={(e, { suggestionValue }) => {
-        onAdd(suggestionValue);
-        e.preventDefault();
-      }}
+      renderSuggestionsContainer={renderSuggestionsContainer}
+      renderInputComponent={renderInputComponent}
+      getSuggestionValue={getSuggestionValue}
       inputProps={{
-        chips: values,
-        value: val,
+        chips: selectedChips,
+        value: inputValue,
         onAdd,
         onDelete,
-        onChange: handletextFieldInputChange,
+        onChange,
       }}
     />
   );
